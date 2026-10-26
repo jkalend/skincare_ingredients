@@ -10,6 +10,10 @@ Language: Go 1.26 (ADR 0001). The claim-by-claim review and the cut v1 scope are
 in [`docs/review-2026-10-26.md`](docs/review-2026-10-26.md). Next slice: port
 the validated parser, then ship `lookup` / `parse` / `analyze` / `shelf`.
 
+**Repo:** <https://github.com/jkalend/skincare_ingredients> (public). **CI:**
+`workflow_dispatch` only — see [`docs/run-ci.md`](docs/run-ci.md) for running it
+and having ChatGPT read the result.
+
 ## Hard constraints
 
 | Constraint | Consequence |
