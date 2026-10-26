@@ -33,6 +33,11 @@ not a log hunt.
 The workflow currently checks docs links. When the Go code lands, the same job
 gets `go test ./...` and the parser corpus gate; the result shape stays.
 
+Verified 2026-10-26: run
+[40348273040](https://github.com/jkalend/skincare_ingredients/actions/runs/40348273040)
+succeeded with `docs_links: success`; its result is committed as
+[`ci/last-run.json`](https://github.com/jkalend/skincare_ingredients/blob/main/ci/last-run.json).
+
 ## Option A — you start it, ChatGPT reads it (simplest, no token in ChatGPT)
 
 Run one of these from your machine:
