@@ -2,18 +2,18 @@
   "checks": {
     "docs_links": "success"
   },
-  "commit": "654ce5141eb1d53c330909c4050dd5c472751dbe",
+  "commit": "074469007db374dff7136894661ef070ffe4881d",
   "conclusion": "success",
   "details": [
     "OK: 10 Markdown files; required files present; links resolve"
   ],
   "event": "workflow_dispatch",
-  "generated_at": "2026-10-26T15:23:51Z",
-  "reason": "final verification",
+  "generated_at": "2026-10-26T15:26:18Z",
+  "reason": "verify ADR wording",
   "ref": "main",
   "run_attempt": "1",
-  "run_id": "40348890591",
-  "run_url": "https://github.com/jkalend/skincare_ingredients/actions/runs/40348890591",
+  "run_id": "40349282233",
+  "run_url": "https://github.com/jkalend/skincare_ingredients/actions/runs/40349282233",
   "schema_version": 1,
   "status": "completed",
   "workflow": "ci"
