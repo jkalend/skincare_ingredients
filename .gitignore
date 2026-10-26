@@ -1,0 +1,17 @@
+# Local scratch and downloads
+.tmp/
+cache/
+state/
+
+# Build output
+dist/
+*.exe
+*.test
+*.out
+
+# Environment
+.env
+.env.*
+.venv/
+venv/
+__pycache__/
