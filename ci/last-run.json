@@ -1,0 +1,20 @@
+{
+  "checks": {
+    "docs_links": "success"
+  },
+  "commit": "b8d542e14a001797df2edf217c4b76d63da15a34",
+  "conclusion": "success",
+  "details": [
+    "OK: 10 Markdown files; required files present; links resolve"
+  ],
+  "event": "workflow_dispatch",
+  "generated_at": "2026-10-26T15:19:11Z",
+  "reason": "initial verification",
+  "ref": "main",
+  "run_attempt": "1",
+  "run_id": "40348115760",
+  "run_url": "https://github.com/jkalend/skincare_ingredients/actions/runs/40348115760",
+  "schema_version": 1,
+  "status": "completed",
+  "workflow": "ci"
+}
