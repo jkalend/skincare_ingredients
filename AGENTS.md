@@ -26,6 +26,10 @@ operational guides are [`docs/run-ci.md`](docs/run-ci.md) and
 - Keep `data/` to open data: OBF-derived data is ODbL, CosIng-derived data is
   CC BY 4.0. Attribution and the database licence stay in
   [`DATA-LICENSE.md`](DATA-LICENSE.md).
+- Publish a curated product/formula catalog only after explicit owner
+  authorization and a source-terms check. Keep source links, provenance,
+  confidence and unresolved tokens; exclude ownership counts, shelf labels,
+  wishlists, personal notes and raw captures.
 - CI is invocation-only: `workflow_dispatch`. Do not add `schedule`, `push` or
   `pull_request` triggers without an explicit decision.
 - Run `go test ./...` and `go vet ./...` before declaring a code change done.
@@ -37,9 +41,10 @@ operational guides are [`docs/run-ci.md`](docs/run-ci.md) and
   matches, with the annex and entry number.
 - Bypass bot protection (Cloudflare interstitials, CAPTCHAs) or use a login to
   reach ingredient text.
-- Commit scraped HTML, scraped ingredient panels, the personal shelf,
+- Commit raw scraped HTML, ingredient-panel captures, the personal shelf,
   credentials, cookies, or anything from a source whose terms forbid
-  redistribution. Those live in gitignored `local/`.
+  redistribution. Those live in gitignored `local/`. The normalized catalog
+  is the explicit, owner-authorized exception described above.
 - Present a single unconfirmed scrape as verified. One source = `unverified`.
 
 ## Conventions

@@ -26,8 +26,11 @@ go build -o skincare ./cmd/skincare
 ./skincare mcp --transport http --addr 127.0.0.1:8080 --read-only
 ```
 
-Personal inventory imports and exports stay under gitignored `local/`; they are
-not added to the public ingredient dataset.
+Private inventory records, ownership counts and wishlists stay under gitignored
+`local/`. The repository can also contain an explicitly authorized public
+catalog of product names and ordered ingredient lists at
+[`data/catalog/products.json`](data/catalog/products.json); it carries source
+provenance and uncertainty, with personal shelf details removed.
 
 ChatGPT connection: [`docs/chatgpt-mcp.md`](docs/chatgpt-mcp.md). Local agent:
 `./skincare mcp --transport stdio`.
