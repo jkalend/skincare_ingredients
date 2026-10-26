@@ -2,6 +2,8 @@
 .tmp/
 cache/
 state/
+local/
+ci/docs-check.log
 
 # Build output
 dist/

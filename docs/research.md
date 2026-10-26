@@ -19,10 +19,10 @@ cache, a scraper, and a thin command surface an agent can drive.
   CC BY 4.0) + a scraped fallback for products nobody has recorded.
 - **Canonicalisation**: deterministic chain; a local model only for the residual
   tokens, always tagged.
-- **Publish**: static JSON/SQLite built by GitHub Actions, served from Pages or a
-  release asset. Free tier covers this comfortably.
-- **Consume**: read-only MCP over the same static data, which ChatGPT can attach
-  as a custom connector; CLI covers everything else.
+- **Publish**: static JSON built by an on-demand `workflow_dispatch` run,
+  committed to the public repo; optional Pages. Free for public repos.
+- **Consume**: read-only MCP over the same data, which ChatGPT can attach as a
+  custom connector; CLI covers everything else.
 
 CI/CD belongs to the **data path** (ingest, canonicalise, verify, pin, publish).
 It cannot serve the **query path**: Actions return `204`, need a PAT with
@@ -169,12 +169,12 @@ authenticated path**. Nobody else's ChatGPT should be able to write to the shelf
 
 | Job | Verdict |
 |---|---|
-| Nightly ETL: OBF dump + CosIng annexes → parse → canonicalise → `data/**` JSON | yes |
-| PR gate: parse-rate and Annex II count within tolerance of the pinned corpus | yes |
+| On-demand ETL: `workflow_dispatch` → OBF dump + CosIng annexes → parse → canonicalise → `data/**` JSON | yes |
+| PR gate: parse-rate and Annex II count within tolerance of the pinned corpus | deferred; runs are invocation-only |
 | Pin the regulatory register per build (stripped content hash + `last_update`) so every report is reproducible | yes |
 | `workflow_dispatch` batch: OCR + parse a folder of panel photos, return an artifact | deferred (v2) |
 | Answer a chat turn synchronously | no |
-| Cron reliability | `schedule` is delayed under load, default branch only, and **public repos auto-disable schedules after 60 days of inactivity**. Private Free repos get 2,000 Actions minutes/month; a 2–5 min nightly run fits. Pages on Free is public-repo only. |
+| Cron / nightly | **not used.** No `schedule`, no push/PR trigger. Public-repo Actions minutes are free; each run writes `ci/last-run.json`. |
 
 ## 9. Decisions (was: open questions)
 
@@ -186,7 +186,7 @@ authenticated path**. Nobody else's ChatGPT should be able to write to the shelf
    disappears or drifts.
 3. **OBF:** dump-first; verified available. API only for one real scan.
 4. **OCR:** cut from v1; barcode + pasted text first.
-5. **Publication:** private repo in v1; no ODbL share-alike trigger. If the
-   repo is made public, split code/data and publish OBF/CosIng-derived data
-   under ODbL/CC BY 4.0 with attribution. See
+5. **Publication:** public repo. `data/` is public, OBF-derived data is ODbL,
+   CosIng-derived data is CC BY 4.0; scraped panels and the personal shelf stay
+   in gitignored `local/` unless explicitly published. See
    [`decisions/0002-data-and-ci.md`](decisions/0002-data-and-ci.md).

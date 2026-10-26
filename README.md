@@ -29,22 +29,27 @@ the validated parser, then ship `lookup` / `parse` / `analyze` / `shelf`.
 | [`docs/scraping.md`](docs/scraping.md) | Which sites are usable, verified `robots.txt` findings, the extraction ladder, the provenance record, and the consent rules. |
 | [`docs/agent-interface.md`](docs/agent-interface.md) | CLI and MCP contract, job protocol, work orders, on-disk data model, multi-agent coordination. |
 | [`docs/decisions/0001-language.md`](docs/decisions/0001-language.md) | Go 1.26 static binary; Python parser used only as an offline oracle. |
-| [`docs/decisions/0002-data-and-ci.md`](docs/decisions/0002-data-and-ci.md) | Private repo, `data/` committed, JSON not SQLite, free private-repo CI, no Pages/remote MCP in v1. |
+| [`docs/decisions/0002-data-and-ci.md`](docs/decisions/0002-data-and-ci.md) | Public repo, `data/` open data, `local/` private overlay, `workflow_dispatch`-only CI. |
+| [`docs/run-ci.md`](docs/run-ci.md) | Plain-language ways to run CI and have ChatGPT read the result. |
+| [`DATA-LICENSE.md`](DATA-LICENSE.md) | ODbL for OBF-derived data, CC BY 4.0 for CosIng-derived data, scraped data excluded. |
 | [`AGENTS.md`](AGENTS.md) | Repo rules for any agent working in here. |
 
 ## Scope and decisions
 
-- **v1, local and private:** `lookup`, `parse` (text/file/stdin), `analyze`,
+- **v1, local and public-data:** `lookup`, `parse` (text/file/stdin), `analyze`,
   `resolve`, `shelf`, `export json|csv`, `doctor`. Deterministic resolver only;
   no model in the loop.
-- **Deferred:** job files/locks/queue, OCR, local LLM, remote MCP or Pages,
-  SQLite export, batch scraping, multi-agent coordination.
+- **Deferred:** job files/locks/queue, OCR, local LLM, remote MCP, SQLite
+  export, batch scraping, multi-agent coordination.
 - **Language:** Go 1.26, one static binary. The MIT `on-the-list` parser is an
   offline porting oracle, not a runtime dependency.
-- **Storage:** `data/` is committed in a private repo. The OBF dump, raw HTML,
-  images and HTTP cache are not. No SQLite in Git, no LFS.
-- **CI:** GitHub Free private repo (2,000 min/month), nightly ETL and a PR
-  fixture gate. No paid runner, no card, no Pages.
+- **Storage:** the repo is public. `data/` holds open, OBF/CosIng-derived data
+  under ODbL/CC BY 4.0. `local/` is gitignored and holds the personal shelf and
+  scraped observations. The OBF dump, raw HTML, images and HTTP cache are never
+  committed.
+- **CI:** public GitHub repo, **`workflow_dispatch` only** — no schedule, no
+  push/PR trigger. Standard public-repo Actions minutes are free. Each run
+  writes `ci/last-run.json` for ChatGPT and agents to read.
 
 ## What it will be able to do
 
@@ -58,9 +63,13 @@ the validated parser, then ship `lookup` / `parse` / `analyze` / `shelf`.
 ## Licensing stance
 
 - Code: TBD (MIT or Apache-2.0) once there is code.
-- CosIng data: © European Union, CC BY 4.0 (Commission Decision 2011/833/EU). Attribution required, unmodified reuse allowed.
+- Data in `data/`: OBF-derived data is ODbL 1.0 (attribute Open Beauty Facts,
+  share-alike); CosIng-derived data is CC BY 4.0 (attribute the European Union,
+  indicate changes). See [`DATA-LICENSE.md`](DATA-LICENSE.md).
+- CosIng data: © European Union, CC BY 4.0 (Commission Decision 2011/833/EU).
 - Open Beauty Facts data: ODbL 1.0. **Share-alike**: a derived database published publicly must also be ODbL, with attribution to Open Beauty Facts.
-- Scraped ingredient text: not ours to relicense. Stored locally with provenance; publishable only as facts about a product, if at all.
+- Scraped ingredient text: not ours to relicense. It lives in gitignored
+  `local/` with provenance; it is never committed to the public repo.
 
 ## Non-goals
 

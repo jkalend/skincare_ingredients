@@ -191,9 +191,11 @@ cache/http/<host>/<sha>.body      + .meta.json (etag, fetched_at, status)
 ```
 
 Deferred (not created in v1): `state/jobs/<id>.json`, `state/locks/`,
-`queue/<work-order-id>.json`. `cache/` is gitignored; `data/` is committed in
-the private repo. The registry `manifest.json` records the stripped content
-hash, `last_update`, source URL and `fetched_at`; the raw CSVs are audit data.
+`queue/<work-order-id>.json`. `cache/` and `local/` are gitignored; `data/` is
+committed in the public repo. The personal shelf and scraped observations live
+in `local/` unless explicitly published. The registry `manifest.json` records
+the stripped content hash, `last_update`, source URL and `fetched_at`; the raw
+CSVs are audit data.
 
 Product record, minimum shape:
 

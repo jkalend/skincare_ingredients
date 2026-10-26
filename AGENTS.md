@@ -4,8 +4,10 @@ Repo purpose: a free, agent-driven skincare ingredient index. Read
 [`docs/research.md`](docs/research.md) before proposing anything; read
 [`docs/agent-interface.md`](docs/agent-interface.md) before designing a command.
 
-**Current phase: research.** There is no code. Do not scaffold an implementation
-until the language choice is recorded as a decision in `docs/`.
+**Current phase: foundations.** The language (Go 1.26) and the public/on-demand
+CI design are recorded in `docs/decisions/`. There is no product code yet; start
+from the first slice in [`docs/review-2026-10-26.md`](docs/review-2026-10-26.md)
+§8.
 
 ## Must
 
@@ -20,6 +22,11 @@ until the language choice is recorded as a decision in `docs/`.
 - Regenerate generated files; never hand-edit them.
 - Honor `robots.txt` for the user agent actually in use, plus the per-host
   request budget in [`docs/scraping.md`](docs/scraping.md).
+- Keep `data/` to open data: OBF-derived data is ODbL, CosIng-derived data is
+  CC BY 4.0. Attribution and the database licence stay in
+  [`DATA-LICENSE.md`](DATA-LICENSE.md).
+- CI is invocation-only: `workflow_dispatch`. Do not add `schedule`, `push` or
+  `pull_request` triggers without an explicit decision.
 
 ## Must not
 
@@ -28,8 +35,9 @@ until the language choice is recorded as a decision in `docs/`.
   matches, with the annex and entry number.
 - Bypass bot protection (Cloudflare interstitials, CAPTCHAs) or use a login to
   reach ingredient text.
-- Commit scraped HTML, credentials, cookies, or anything from a source whose
-  terms forbid redistribution.
+- Commit scraped HTML, scraped ingredient panels, the personal shelf,
+  credentials, cookies, or anything from a source whose terms forbid
+  redistribution. Those live in gitignored `local/`.
 - Present a single unconfirmed scrape as verified. One source = `unverified`.
 
 ## Conventions

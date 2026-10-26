@@ -1,57 +1,68 @@
-# ADR 0002 — Data location, publication and CI
+# ADR 0002 — Public data, local overlay, on-demand CI
 
-- **Status:** accepted
+- **Status:** accepted; amended 2026-10-26
 - **Date:** 2026-10-26
-- **Supersedes:** none
+- **Supersedes:** the earlier private-repo/nightly version of this ADR
 
 ## Context
 
-The inventory is personal and small. The derived data combines OBF records
-(ODbL, share-alike), CosIng annexes (CC BY 4.0) and, for products nobody has
-recorded, scraped panels that are not ours to relicense. GitHub Actions is
-free for public repositories and gives 2,000 minutes/month on the Free private
-plan. GitHub Pages on Free is public-repository only; publishing from a private
-repo needs Pro, and the site is public anyway.
+The inventory is personal but the repo is now **public**, and CI runs **only
+when invoked** — no `schedule`, no nightly job, no push/PR trigger.
+
+That changes the licensing and privacy shape:
+
+- Open Beauty Facts data is ODbL 1.0. A public derived database must also be
+  ODbL, with attribution.
+- CosIng annexes are CC BY 4.0; attribution and changes indicated.
+- Scraped ingredient panels are not ours to relicense. They cannot go into a
+  public repo.
+- The shelf is personal. It can be public if the owner puts it in `data/`, but
+  the safe default is a gitignored local overlay.
+- GitHub Actions is free and unlimited for standard runners on public repos.
 
 ## Decision
 
-**Keep the repo private and commit the small derived data in `data/`.**
+**Public repo, open data in `data/`, personal/scraped data in `local/`.**
 
-- `data/` is versioned: one JSON per product/ingredient, one shelf file, the
-  registry CSV + content manifest, and the local indexes.
-- `cache/` and `state/` are gitignored. The OBF dump (17.9 MB gzip CSV / 104 MB
-  gzip JSONL), raw HTML, images, cookies and HTTP cache are never committed.
-- JSON, not SQLite, is the source of truth for v1. No Git LFS.
-- `data/` files are generated and idempotent: unchanged content must not
-  rewrite a file or change `fetched_at`.
-- The CosIng registry is identified by the **content hash of the CSV with the
-  two export-metadata lines removed** plus the Commission's `last_update`.
-  The raw CSV is kept for audit; the raw sha256 is not the registry identity.
-- The query path is local: CLI plus stdio MCP. No GitHub Pages, no remote MCP,
-  no Actions-as-API in v1.
-- CI: private repo, `ubuntu-latest`, nightly `schedule` + `workflow_dispatch`,
-  PR gate on a pinned 1,000-label fixture. Expected 2–5 minutes/run, i.e.
-  60–150 minutes/month against the 2,000-minute Free allowance.
+- `data/` is committed and public: products, ingredients, registry CSVs +
+  manifest, indexes, and optional public shelf. OBF-derived data is ODbL 1.0;
+  CosIng-derived data is CC BY 4.0. `DATA-LICENSE.md` states both and the
+  attribution.
+- `local/` is gitignored: the personal shelf by default, scraped observations,
+  raw HTML, images, cookies and anything whose source terms forbid
+  redistribution.
+- If the owner wants the shelf public, move `local/shelf/` to `data/shelf/`.
+  That is an explicit publication choice, not a default.
+- CI is **`workflow_dispatch` only**. No `schedule`, no `push`, no
+  `pull_request`. The workflow is started from the GitHub UI, `gh workflow run`,
+  or a ChatGPT Action/MCP that calls the GitHub API.
+- Every run writes `ci/last-run.json` to `main`: status, conclusion, commit,
+  run URL, check outcomes and a short error tail. That file is the machine-
+  readable result ChatGPT or an agent reads after the run.
+- The query path stays local: CLI plus stdio MCP. A read-only Pages/JSON view is
+  optional later; it is not required for v1.
+- No remote MCP write endpoint. ChatGPT gets a trigger tool only if the owner
+  adds a Custom GPT Action or MCP that holds a fine-grained GitHub token.
 
 ## Consequences
 
-- No ODbL share-alike trigger while the repo is private; OBF is still
-  attributed in the data and generated reports.
-- Scraped panels stay local and unpublished, matching the repo rule.
-- The shelf is not reachable from ChatGPT. That is acceptable for v1; the
-  local agent can read `data/**` and speak MCP over stdio.
-- If the repo is made public later, do not simply flip visibility. Split the
-  code from the data, publish only OBF/CosIng-derived data under ODbL/CC BY 4.0
-  with attribution, and keep shelf/scraped observations private.
-- If ChatGPT access is wanted later, publish a read-only, non-personal subset
-  to a free public host (e.g. Cloudflare Workers free, no card) or use Secure
-  MCP Tunnel; do not expose write tools.
+- ODbL share-alike is active for the public `data/` directory. Attribute Open
+  Beauty Facts and keep the database ODbL. Do not mix scraped panels into it.
+- The public repo can be read without a token. Triggering a workflow still
+  needs an authenticated GitHub token with `actions: write`.
+- No schedule means no 60-day auto-disable problem and no wasted minutes.
+  Public-repo Actions minutes are free; the only cost is the run you asked for.
+- The shelf is private by default. ChatGPT can read public `data/` and
+  `ci/last-run.json`; it cannot read `local/` unless the owner publishes it.
+- Bot commits from the workflow update `ci/last-run.json`; a push made with
+  `GITHUB_TOKEN` does not trigger another workflow.
 
 ## Alternatives
 
 | Option | Why not chosen |
 |---|---|
-| Public repo | Free unlimited Actions and Pages, but publishing OBF-derived data triggers ODbL share-alike and scraped panels may not be redistributable. |
-| Private repo + Pages | Pages from a private repo needs Pro; site is public anyway. |
-| Release asset / artifact as storage | Artifacts expire (500 MB private quota); release assets are not a query API. |
-| Local Task Scheduler only | Zero CI minutes, but no reproducible history and no PR gate. |
+| Private repo | 2,000 Actions min/month and no ODbL trigger, but the user asked for public and a public repo is unlimited/free. |
+| Public repo with private shelf in a separate private repo | More moving parts; a gitignored `local/` overlay is enough. |
+| Nightly `schedule` | Rejected by the user; also delayed under load and auto-disabled after 60 days of inactivity in public repos. |
+| Push/PR triggers | Rejected: runs must happen only on invocation. |
+| Remote MCP write endpoint | Needs a public host and a Business/Enterprise ChatGPT plan for full MCP; the token belongs in a narrow Action/proxy, not a chat. |
