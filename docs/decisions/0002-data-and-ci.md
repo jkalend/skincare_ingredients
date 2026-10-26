@@ -14,10 +14,12 @@ That changes the licensing and privacy shape:
 - Open Beauty Facts data is ODbL 1.0. A public derived database must also be
   ODbL, with attribution.
 - CosIng annexes are CC BY 4.0; attribution and changes indicated.
-- Scraped ingredient panels are not ours to relicense. They cannot go into a
-  public repo.
+- Raw scraped ingredient panels are not ours to relicense. Captures cannot go
+  into a public repo.
 - The shelf is personal. It can be public if the owner puts it in `data/`, but
-  the safe default is a gitignored local overlay.
+  the safe default is a gitignored local overlay. A normalized product/formula
+  catalog can be published only after explicit owner authorization and a
+  source-terms check.
 - GitHub Actions is free and unlimited for standard runners on public repos.
 
 ## Decision
@@ -30,7 +32,10 @@ That changes the licensing and privacy shape:
   attribution.
 - `local/` is gitignored: the personal shelf by default, scraped observations,
   raw HTML, images, cookies and anything whose source terms forbid
-  redistribution.
+  redistribution. `data/catalog/products.json` is an explicit owner-authorized
+  exception containing normalized product names, ingredient tokens, source
+  links and uncertainty; it excludes ownership counts, wishlist entries,
+  personal notes and raw captures.
 - If the owner wants the shelf public, move `local/shelf/` to `data/shelf/`.
   That is an explicit publication choice, not a default.
 - CI is **`workflow_dispatch` only**. No `schedule`, no `push`, no
@@ -48,8 +53,9 @@ That changes the licensing and privacy shape:
 
 ## Consequences
 
-- ODbL share-alike is active for the public `data/` directory. Attribute Open
-  Beauty Facts and keep the database ODbL. Do not mix scraped panels into it.
+- ODbL share-alike applies to the public catalog database. Attribute Open
+  Beauty Facts and keep its derivative database ODbL. Do not publish scraped
+  panel captures or source material whose terms forbid redistribution.
 - The public repo can be read without a token. Triggering a workflow still
   needs an authenticated GitHub token with `actions: write`.
 - No schedule means no 60-day auto-disable problem and no wasted minutes.
