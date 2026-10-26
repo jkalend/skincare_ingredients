@@ -223,7 +223,7 @@ func (s *Service) buildProduct(obf *store.OBFProduct) (*inci.Product, *Analysis,
 		Source: &inci.SourceRef{
 			Source:     "obf",
 			URL:        obf.URL,
-			FetchedAt:  obf.FetchedAt,
+			FetchedAt:  &obf.FetchedAt,
 			Method:     "obf_api",
 			Confidence: 0.7,
 		},
@@ -367,20 +367,25 @@ func (s *Service) ShelfList(name string) *Response {
 	items := make([]map[string]any, 0, len(products))
 	for _, item := range products {
 		items = append(items, map[string]any{
-			"product_key": item.Product.ProductKey,
-			"barcode":     item.Product.Barcode,
-			"brand":       item.Product.Brand,
-			"name":        item.Product.Name,
-			"trust":       item.Product.Trust,
+			"product_key":    item.Product.ProductKey,
+			"barcode":        item.Product.Barcode,
+			"brand":          item.Product.Brand,
+			"name":           item.Product.Name,
+			"units_owned":    item.Product.UnitsOwned,
+			"variant_status": item.Product.VariantStatus,
+			"trust":          item.Product.Trust,
 		})
 	}
 	return &Response{Data: map[string]any{"shelf": shelf, "items": items}, Exit: 0, Warnings: []Warning{}, WorkOrders: []WorkOrder{}, Next: []string{}}
 }
 
-func (s *Service) ShelfRemove(name, barcode string) *Response {
-	product := s.Store.ProductByBarcode(barcode)
+func (s *Service) ShelfRemove(name, identifier string) *Response {
+	product := s.Store.ProductByKey(identifier)
 	if product == nil {
-		return &Response{Data: map[string]any{"status": "not_found", "barcode": barcode}, Exit: 3, Warnings: []Warning{}, WorkOrders: []WorkOrder{}, Next: []string{}}
+		product = s.Store.ProductByBarcode(identifier)
+	}
+	if product == nil {
+		return &Response{Data: map[string]any{"status": "not_found", "product": identifier}, Exit: 3, Warnings: []Warning{}, WorkOrders: []WorkOrder{}, Next: []string{}}
 	}
 	shelf, err := s.Store.RemoveFromShelf(name, product.ProductKey)
 	if err != nil {

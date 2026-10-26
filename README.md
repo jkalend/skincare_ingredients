@@ -22,8 +22,12 @@ go build -o skincare ./cmd/skincare
 ./skincare analyze --text "Aqua, Glycerin, Niacinamide"
 ./skincare lookup 1000034026006
 ./skincare shelf add --shelf default 1000034026006
+./skincare import --file local/imports/owned-inventory.json --shelf owned --dry-run
 ./skincare mcp --transport http --addr 127.0.0.1:8080 --read-only
 ```
+
+Personal inventory imports and exports stay under gitignored `local/`; they are
+not added to the public ingredient dataset.
 
 ChatGPT connection: [`docs/chatgpt-mcp.md`](docs/chatgpt-mcp.md). Local agent:
 `./skincare mcp --transport stdio`.

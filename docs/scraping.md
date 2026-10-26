@@ -62,6 +62,9 @@ A candidate list is rejected unless all hold:
 - ≥ 3 comma-separated tokens after splitting on `,` / `;` / `•` / newline.
 - Contains `aqua`, `water` or an anhydrous marker (e.g. `balm`, `oil`, `stick`)
   — otherwise the panel is missing or truncated.
+- A complete, source-listed formula may start with a water-bearing filtrate or
+  extract (for example, snail secretion filtrate) without listing a separate
+  `Aqua` token. Preserve the panel verbatim; do not insert water.
 - ≥ 60 % of tokens resolve through the deterministic chain (see
   [`research.md`](research.md) §6); below that, store as `unresolved_document`.
 - Contains no sentence-level punctuation runs (`Directions`, `Apply`, `Warning`,
