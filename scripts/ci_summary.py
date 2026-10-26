@@ -36,10 +36,12 @@ def main() -> int:
     parser.add_argument("--docs-outcome", required=True)
     parser.add_argument("--go-outcome", default="skipped")
     parser.add_argument("--build-outcome", default="skipped")
+    parser.add_argument("--smoke-outcome", default="skipped")
     parser.add_argument("--reason", default="manual")
     parser.add_argument("--details-file")
     parser.add_argument("--go-details-file")
     parser.add_argument("--build-details-file")
+    parser.add_argument("--smoke-details-file")
     parser.add_argument("--binary")
     parser.add_argument("--output", default="ci/last-run.json")
     args = parser.parse_args()
@@ -53,11 +55,12 @@ def main() -> int:
         "docs_links": args.docs_outcome,
         "go_test": args.go_outcome,
         "go_build": args.build_outcome,
+        "cli_smoke": args.smoke_outcome,
     }
     ok = all(value in ("success", "skipped") for value in checks.values())
 
     details: list[str] = []
-    for path in (args.go_details_file, args.build_details_file, args.details_file):
+    for path in (args.go_details_file, args.build_details_file, args.smoke_details_file, args.details_file):
         if path:
             details.extend(tail(path))
     details = details[-MAX_TOTAL_DETAIL_LINES:]

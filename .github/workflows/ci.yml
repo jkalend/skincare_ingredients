@@ -45,6 +45,17 @@ jobs:
           CGO_ENABLED=0 go build -trimpath -ldflags="-s -w" -o dist/skincare ./cmd/skincare 2>&1 | tee ci/build.log
           ls -l dist/skincare
 
+      - name: CLI smoke
+        id: smoke
+        continue-on-error: true
+        run: |
+          set -o pipefail
+          ./dist/skincare doctor > ci/doctor.json
+          ./dist/skincare analyze --text "Aqua, Glycerin, Niacinamide, Cyclomethicone" > ci/analyze.json
+          grep -q '"canonical": "AQUA"' ci/analyze.json
+          grep -q '"reference": "1388"' ci/analyze.json
+          echo "doctor and analyze smoke passed" | tee ci/smoke.log
+
       - name: Check docs links
         id: docs
         continue-on-error: true
@@ -61,10 +72,12 @@ jobs:
             --docs-outcome "${{ steps.docs.outcome }}" \
             --go-outcome "${{ steps.gotest.outcome }}" \
             --build-outcome "${{ steps.build.outcome }}" \
+            --smoke-outcome "${{ steps.smoke.outcome }}" \
             --reason "$REASON" \
             --details-file ci/docs-check.log \
             --go-details-file ci/go-test.log \
             --build-details-file ci/build.log \
+            --smoke-details-file ci/smoke.log \
             --binary dist/skincare
 
       - name: Commit result
@@ -77,5 +90,5 @@ jobs:
           git push origin HEAD:main
 
       - name: Fail if any check failed
-        if: always() && (steps.docs.outcome != 'success' || steps.gotest.outcome != 'success' || steps.build.outcome != 'success')
+        if: always() && (steps.docs.outcome != 'success' || steps.gotest.outcome != 'success' || steps.build.outcome != 'success' || steps.smoke.outcome != 'success')
         run: exit 1

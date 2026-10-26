@@ -4,6 +4,8 @@ cache/
 state/
 local/
 ci/*.log
+ci/doctor.json
+ci/analyze.json
 
 # Build output
 dist/

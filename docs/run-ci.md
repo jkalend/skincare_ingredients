@@ -24,16 +24,17 @@ not a log hunt.
   "commit": "abc123…",
   "ref": "main",
   "reason": "manual",
-  "checks": { "docs_links": "success", "go_test": "success", "go_build": "success" },
+  "checks": { "docs_links": "success", "go_test": "success", "go_build": "success", "cli_smoke": "success" },
   "binary_bytes": 12345678,
   "details": ["OK: 12 Markdown files; required files present; links resolve"],
   "generated_at": "2026-10-26T15:00:00Z"
 }
 ```
 
-The workflow checks docs links, runs `go test ./...`, and builds the static
-binary. The result shape is stable. `ci/last-run.json` is the authoritative
-last run; open it for the current run URL and check outcomes.
+The workflow checks docs links, runs `go test ./...`, builds the static binary,
+and runs a CLI smoke test (`doctor` + `analyze`). The result shape is stable.
+`ci/last-run.json` is the authoritative last run; open it for the current run
+URL and check outcomes.
 
 For the ChatGPT MCP connection itself, see
 [`chatgpt-mcp.md`](chatgpt-mcp.md).
