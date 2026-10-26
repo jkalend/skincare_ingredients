@@ -8,7 +8,7 @@ assumptions.**
 
 > **v1 scope (2026-10-26).** The full contract below is the target, not the
 > first release. v1 implements `lookup`, `search`, `parse`, `analyze`,
-> `resolve`, `shelf`, `export json|csv`, `doctor` over a local `data/`
+> `resolve`, private `import`, `shelf`, `export json|csv`, `doctor` over a local `data/`
 > directory, plus stdio MCP and a read-only Streamable HTTP MCP endpoint for
 > ChatGPT. Deferred: `ocr`, `ingest` and batch jobs, `job get/ls`,
 > `export sqlite`, job files/locks/queue, multi-agent claims and remote MCP
@@ -64,7 +64,8 @@ Fast, local, synchronous unless noted.
 | `analyze` | `--file` / stdin / `--product` | per-ingredient canonical + functions + annex status | yes |
 | `ingest <url…>` | URLs, optional `--barcode` `--product-key` | observations stored; **job if > 1 URL** | deferred |
 | `resolve <token…>` | printed tokens | canonical guess + `method` + `confidence` | yes, deterministic only |
-| `shelf add <barcode>` / `shelf ls` / `shelf rm` | shelf name | membership + rollup | yes |
+| `import --file <json>` | private inventory manifest | locally parsed products + source observations + shelf membership | yes, local-only |
+| `shelf add <barcode>` / `shelf ls` / `shelf rm <product-key|barcode>` | shelf name | membership + rollup | yes |
 | `job get <id>` / `job ls` | — | job state, partial results | deferred |
 | `export --format json\|csv\|sqlite` | — | path + sha256 | json/csv only |
 | `doctor` | — | registry versions, cache size, source health, host budgets | yes |
@@ -214,6 +215,9 @@ Product record, minimum shape:
   "may_contain": [],
   "unresolved": [],
   "trust": "verified|probable|unverified|conflict|manual",
+  "units_owned": 1,
+  "variant_status": "confirmed|uncertain|unresolved",
+  "notes": [],
   "sources": ["sha256:…"],
   "generated": true
 }
@@ -221,6 +225,23 @@ Product record, minimum shape:
 
 Every file carries `generated: true` and a `generator_version`. Hand edits are
 overwritten by the next build — that is the point.
+
+`import --file local/imports/owned-inventory.json --shelf default` reads a
+versioned JSON manifest containing product identity, unit count, exact ordered
+INCI text, source metadata (`source`, HTTPS `url`, `fetched_at` or `null` when
+the exact time is unknown, `method`, and `confidence`), and optional variant notes. It parses and resolves every token
+against the local CosIng snapshot, writes products and hashed source
+observations under `local/`, and adds the products to the named private shelf.
+The whole manifest is validated before any writes. Existing matching records
+are idempotent; replacing changed records requires `--force`. `--dry-run`
+validates and reports counts without writing. A one-source product always has
+`trust: unverified`; missing variants can be represented without an ingredient
+list and remain explicitly unresolved. The import command never writes under
+`data/`.
+
+JSON export includes product, ingredient, and source provenance. CSV export
+includes source URL/date/method/confidence and units owned on every ingredient
+row; it is a flattened view of the private shelf.
 
 ## 8. Coordination
 

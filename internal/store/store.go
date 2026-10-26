@@ -114,6 +114,9 @@ func (s *Store) loadProducts(dir string) error {
 		if product.ProductKey == "" {
 			continue
 		}
+		if product.UnitsOwned < 1 {
+			product.UnitsOwned = 1
+		}
 		s.Products[product.ProductKey] = &product
 		if product.Barcode != "" {
 			s.ByBarcode[product.Barcode] = product.ProductKey
@@ -171,6 +174,9 @@ func writeJSON(path string, value any) error {
 func (s *Store) SaveProduct(product *inci.Product) error {
 	product.Generated = true
 	product.GeneratorVersion = GeneratorVersion
+	if product.UnitsOwned < 1 {
+		product.UnitsOwned = 1
+	}
 	dir := filepath.Join(s.LocalDir, "products")
 	if product.Source != nil && product.Source.Source == "obf" {
 		dir = filepath.Join(s.DataDir, "products")
@@ -326,7 +332,9 @@ func (s *Store) ShelfReport(name string) map[string]any {
 	functions := map[string]int{}
 	annex := map[string]int{}
 	unresolved := 0
+	units := 0
 	for _, item := range products {
+		units += item.Product.UnitsOwned
 		for _, line := range append(append([]inci.Line{}, item.Product.Ingredients...), item.Product.MayContain...) {
 			if line.Canonical == nil {
 				unresolved++
@@ -355,6 +363,7 @@ func (s *Store) ShelfReport(name string) map[string]any {
 	return map[string]any{
 		"shelf":       name,
 		"products":    len(products),
+		"units":       units,
 		"ingredients": len(canonical),
 		"unresolved":  unresolved,
 		"duplicates":  duplicates,
@@ -404,9 +413,23 @@ func (s *Store) Export(shelfName, format, outPath string) (*ExportResult, error)
 			return nil, err
 		}
 		writer := csv.NewWriter(file)
-		_ = writer.Write([]string{"product_key", "barcode", "brand", "name", "position", "printed", "canonical", "functions", "annex", "method", "confidence"})
+		_ = writer.Write([]string{"product_key", "units_owned", "brand", "name", "size", "trust", "variant_status", "notes", "source", "source_url", "source_fetched_at", "source_method", "source_confidence", "section", "position", "printed", "canonical", "functions", "annex", "method", "confidence"})
 		for _, item := range products {
-			for _, line := range append(append([]inci.Line{}, item.Product.Ingredients...), item.Product.MayContain...) {
+			product := item.Product
+			source, sourceURL, fetchedAt, sourceMethod, sourceConfidence := "", "", "", "", ""
+			if product.Source != nil {
+				source, sourceURL, sourceMethod = product.Source.Source, product.Source.URL, product.Source.Method
+				if product.Source.FetchedAt != nil {
+					fetchedAt = *product.Source.FetchedAt
+				}
+				sourceConfidence = fmt.Sprintf("%.2f", product.Source.Confidence)
+			}
+			base := []string{product.ProductKey, fmt.Sprint(product.UnitsOwned), product.Brand, product.Name, product.Size, product.Trust, product.VariantStatus, strings.Join(product.Notes, ";"), source, sourceURL, fetchedAt, sourceMethod, sourceConfidence}
+			allLines := append(append([]inci.Line{}, product.Ingredients...), product.MayContain...)
+			if len(allLines) == 0 {
+				_ = writer.Write(append(append([]string{}, base...), []string{"unresolved", "", "", "", "", "", "", "", ""}...))
+			}
+			for _, line := range allLines {
 				canonical := ""
 				if line.Canonical != nil {
 					canonical = *line.Canonical
@@ -419,11 +442,15 @@ func (s *Store) Export(shelfName, format, outPath string) (*ExportResult, error)
 					}
 					annex = strings.Join(refs, ";")
 				}
-				_ = writer.Write([]string{
-					item.Product.ProductKey, item.Product.Barcode, item.Product.Brand, item.Product.Name,
-					fmt.Sprint(line.Position), line.Printed, canonical, strings.Join(line.Functions, ";"),
-					annex, line.Method, fmt.Sprintf("%.2f", line.Confidence),
-				})
+				section := "declared"
+				for _, mayLine := range product.MayContain {
+					if mayLine.Position == line.Position && mayLine.Printed == line.Printed {
+						section = "may-contain"
+						break
+					}
+				}
+				row := append(append([]string{}, base...), section, fmt.Sprint(line.Position), line.Printed, canonical, strings.Join(line.Functions, ";"), annex, line.Method, fmt.Sprintf("%.2f", line.Confidence))
+				_ = writer.Write(row)
 			}
 		}
 		writer.Flush()

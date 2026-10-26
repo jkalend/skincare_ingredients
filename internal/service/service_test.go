@@ -98,6 +98,22 @@ func TestShelfLifecycle(t *testing.T) {
 	if remove.Exit != 0 {
 		t.Fatalf("remove exit = %d", remove.Exit)
 	}
+
+	localProduct := &inci.Product{
+		ProductKey: "local:test-cream", Brand: "Test", Name: "Private cream", UnitsOwned: 1,
+		Trust: "unverified", Ingredients: []inci.Line{}, MayContain: []inci.Line{},
+		Unresolved: []inci.Unresolved{}, Sources: []string{},
+	}
+	if err := svc.Store.SaveProduct(localProduct); err != nil {
+		t.Fatal(err)
+	}
+	if _, err := svc.Store.AddToShelf("default", localProduct.ProductKey); err != nil {
+		t.Fatal(err)
+	}
+	remove = svc.ShelfRemove("default", localProduct.ProductKey)
+	if remove.Exit != 0 {
+		t.Fatalf("remove by product key exit = %d", remove.Exit)
+	}
 }
 
 func TestExport(t *testing.T) {

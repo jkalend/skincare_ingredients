@@ -1,12 +1,12 @@
 package inci
 
 // SourceRef is provenance for a stored value. Every record that carries data
-// from a network source must be able to answer: where did this come from, when,
-// by what method, and how sure are we?
+// from a network source records where it came from, when that time is known,
+// by what method, and how sure we are.
 type SourceRef struct {
 	Source     string  `json:"source"`
 	URL        string  `json:"url,omitempty"`
-	FetchedAt  string  `json:"fetched_at,omitempty"`
+	FetchedAt  *string `json:"fetched_at"`
 	Method     string  `json:"method,omitempty"`
 	Confidence float64 `json:"confidence,omitempty"`
 }
@@ -120,6 +120,9 @@ type Product struct {
 	Brand            string       `json:"brand,omitempty"`
 	Name             string       `json:"name,omitempty"`
 	Size             string       `json:"size,omitempty"`
+	UnitsOwned       int          `json:"units_owned,omitempty"`
+	VariantStatus    string       `json:"variant_status,omitempty"`
+	Notes            []string     `json:"notes,omitempty"`
 	Ingredients      []Line       `json:"ingredients"`
 	MayContain       []Line       `json:"may_contain"`
 	Unresolved       []Unresolved `json:"unresolved"`

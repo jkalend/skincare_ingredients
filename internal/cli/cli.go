@@ -31,10 +31,11 @@ Commands:
   parse                         label text -> ordered tokens
   analyze                       label text -> canonical names, functions, annex
   resolve <token...>            resolve printed names
+  import --file <manifest.json> batch import to private local shelf
   ingredient <name>             one canonical ingredient + annex
   shelf add <barcode>           add to a shelf
   shelf ls                      list a shelf
-  shelf rm <barcode>            remove from a shelf
+  shelf rm <product-key|barcode> remove from a shelf
   shelf report                  duplicates, functions, annex matches
   export                        export a shelf (json|csv)
   doctor                        registry/data diagnostics
@@ -250,6 +251,35 @@ func Run(args []string, stdin io.Reader, stdout, stderr io.Writer) int {
 			return usageError(stderr, "ingredient needs a name")
 		}
 		return emit(g.Text, stdout, svc, svc.Ingredient(name))
+	case "import":
+		fs := flag.NewFlagSet("import", flag.ContinueOnError)
+		fs.SetOutput(stderr)
+		file := fs.String("file", "", "versioned private inventory manifest")
+		shelf := fs.String("shelf", "", "private shelf name (defaults to manifest shelf or default)")
+		force := fs.Bool("force", false, "replace changed local product records")
+		dryRun := fs.Bool("dry-run", false, "validate and report without writing")
+		if err := fs.Parse(commandArgs); err != nil {
+			return 2
+		}
+		if *file == "" || len(fs.Args()) != 0 {
+			return usageError(stderr, "import needs --file <manifest.json>")
+		}
+		result, err := svc.Store.ImportInventory(*file, *shelf, *force, *dryRun)
+		if err != nil {
+			return emit(g.Text, stdout, svc, &service.Response{Data: map[string]any{"error": err.Error()}, Exit: 2, Warnings: []service.Warning{}, WorkOrders: []service.WorkOrder{}, Next: []string{}})
+		}
+		warnings := []service.Warning{}
+		exit := 0
+		if result.Unresolved > 0 {
+			warnings = append(warnings, service.Warning{Code: "unresolved_tokens", Message: fmt.Sprintf("%d ingredient token(s) were kept verbatim", result.Unresolved)})
+			exit = 1
+		}
+		for _, item := range svc.Store.ShelfProducts(result.Shelf) {
+			if item.Product.Trust == "unverified" && exit == 0 {
+				exit = 1
+			}
+		}
+		return emit(g.Text, stdout, svc, &service.Response{Data: result, Exit: exit, Warnings: warnings, WorkOrders: []service.WorkOrder{}, Next: []string{"shelf ls --shelf " + result.Shelf, "export --shelf " + result.Shelf}})
 	case "shelf":
 		return runShelf(g, svc, commandArgs, stdout, stderr)
 	case "export":
@@ -332,7 +362,7 @@ func runShelf(g globals, svc *service.Service, args []string, stdout, stderr io.
 		}
 		positional := fs.Args()
 		if len(positional) != 1 {
-			return usageError(stderr, "shelf "+sub+" needs one barcode")
+			return usageError(stderr, "shelf "+sub+" needs one product key or barcode")
 		}
 		if sub == "add" {
 			return emit(g.Text, stdout, svc, svc.ShelfAdd(*shelf, positional[0]))

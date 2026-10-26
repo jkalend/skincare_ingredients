@@ -22,4 +22,6 @@ python scripts/fetch_registry.py
 The script rate-limits itself to 120 requests/minute. It writes the official
 annex CSVs, a stripped content hash for each annex, and a merged ingredient
 catalogue. Scraped panels and the personal shelf live in `../local/`, which is
-gitignored and never published.
+gitignored and never published. Use `skincare import --file
+local/imports/owned-inventory.json --shelf default` for a private batch
+inventory. Product records and source observations stay below `local/`.
