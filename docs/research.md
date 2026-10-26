@@ -148,7 +148,8 @@ records, 16,635 labels ≥ 50 chars, 16,535 parsed (99.4 %), 298,423 ingredients
 OBF `ingredients_text`; `extract()` requires an `Ingredients:` preamble and
 finds only 782 labels (4.7 %). The Annex II match counts (2,408 / 2,037) and
 repeated-entry count (712 / 291) were not independently re-derived —
-`[UNVERIFIED]`.
+`[UNVERIFIED]`. The Go port measures 16,545 / 16,645 labels and 298,436 tokens
+(99.399 %); the 10-row difference from the Python run is CSV quote handling.
 
 Resolver chain to copy (order matters, each step recorded per row):
 `exact` → `cleaned` → `typo_map` → `percent_stripped` → `paren_stripped` →

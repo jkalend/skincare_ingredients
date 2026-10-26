@@ -2,3 +2,4 @@
 *.csv text eol=lf
 *.json text eol=lf
 *.jsonl text eol=lf
+data/registry/cosing/*.csv binary

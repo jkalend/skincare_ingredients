@@ -1,0 +1,533 @@
+{
+  "product_key": "ean:1000034026006",
+  "barcode": "1000034026006",
+  "name": "mask skin technology",
+  "ingredients": [
+    {
+      "position": 1,
+      "printed": "aqua",
+      "canonical": "AQUA",
+      "functions": [
+        "SOLVENT"
+      ],
+      "annex": null,
+      "declared_pct": null,
+      "method": "exact",
+      "confidence": 1
+    },
+    {
+      "position": 2,
+      "printed": "glycerin",
+      "canonical": "GLYCERIN",
+      "functions": [
+        "DENATURANT",
+        "HAIR CONDITIONING",
+        "HUMECTANT",
+        "ORAL CARE",
+        "PERFUMING",
+        "SKIN CONDITIONING",
+        "SKIN PROTECTING",
+        "SOLVENT",
+        "VISCOSITY CONTROLLING"
+      ],
+      "annex": null,
+      "declared_pct": null,
+      "method": "exact",
+      "confidence": 1
+    },
+    {
+      "position": 3,
+      "printed": "dipropylene glycol",
+      "canonical": "DIPROPYLENE GLYCOL",
+      "functions": [
+        "FRAGRANCE",
+        "PERFUMING",
+        "SOLVENT",
+        "VISCOSITY CONTROLLING"
+      ],
+      "annex": null,
+      "declared_pct": null,
+      "method": "exact",
+      "confidence": 1
+    },
+    {
+      "position": 4,
+      "printed": "sodium lauroyl glutamate",
+      "canonical": "SODIUM LAUROYL GLUTAMATE",
+      "functions": [
+        "ANTISTATIC",
+        "HAIR CONDITIONING",
+        "SURFACTANT - CLEANSING"
+      ],
+      "annex": null,
+      "declared_pct": null,
+      "method": "exact",
+      "confidence": 1
+    },
+    {
+      "position": 5,
+      "printed": "diglycerin",
+      "canonical": "DIGLYCERIN",
+      "functions": [
+        "HUMECTANT",
+        "SKIN CONDITIONING"
+      ],
+      "annex": null,
+      "declared_pct": null,
+      "method": "exact",
+      "confidence": 1
+    },
+    {
+      "position": 6,
+      "printed": "betaine",
+      "canonical": "BETAINE",
+      "functions": [
+        "ANTISTATIC",
+        "HAIR CONDITIONING",
+        "HUMECTANT",
+        "SKIN CONDITIONING",
+        "VISCOSITY CONTROLLING"
+      ],
+      "annex": null,
+      "declared_pct": null,
+      "method": "exact",
+      "confidence": 1
+    },
+    {
+      "position": 7,
+      "printed": "simmondsia chinensis (jojoba) leaf extract",
+      "canonical": "SIMMONDSIA CHINENSIS LEAF EXTRACT",
+      "functions": [
+        "HUMECTANT"
+      ],
+      "annex": null,
+      "declared_pct": null,
+      "method": "paren_stripped",
+      "confidence": 0.85
+    },
+    {
+      "position": 8,
+      "printed": "hydrolyzed collagen",
+      "canonical": "HYDROLYZED COLLAGEN",
+      "functions": [
+        "ANTISTATIC",
+        "FILM FORMING",
+        "HAIR CONDITIONING",
+        "HUMECTANT",
+        "SKIN CONDITIONING",
+        "SKIN CONDITIONING - EMOLLIENT"
+      ],
+      "annex": null,
+      "declared_pct": null,
+      "method": "exact",
+      "confidence": 1
+    },
+    {
+      "position": 9,
+      "printed": "sodium hyaluronate",
+      "canonical": "SODIUM HYALURONATE",
+      "functions": [
+        "HUMECTANT",
+        "SKIN CONDITIONING"
+      ],
+      "annex": null,
+      "declared_pct": null,
+      "method": "exact",
+      "confidence": 1
+    },
+    {
+      "position": 10,
+      "printed": "sea silt",
+      "canonical": "SEA SILT",
+      "functions": [
+        "SKIN CONDITIONING"
+      ],
+      "annex": null,
+      "declared_pct": null,
+      "method": "exact",
+      "confidence": 1
+    },
+    {
+      "position": 11,
+      "printed": "panthenol",
+      "canonical": "PANTHENOL",
+      "functions": [
+        "ANTISTATIC",
+        "HAIR CONDITIONING",
+        "SKIN CONDITIONING"
+      ],
+      "annex": null,
+      "declared_pct": null,
+      "method": "exact",
+      "confidence": 1
+    },
+    {
+      "position": 12,
+      "printed": "phenoxyethanol",
+      "canonical": "PHENOXYETHANOL",
+      "functions": [
+        "ANTIMICROBIAL",
+        "PRESERVATIVE"
+      ],
+      "annex": {
+        "matches": [
+          {
+            "annex": "V",
+            "reference": "29",
+            "chemical_name": "2-Phenoxyethanol",
+            "matched_name": "PHENOXYETHANOL",
+            "name_source": "glossary",
+            "max_concentration": "1.0%"
+          }
+        ]
+      },
+      "declared_pct": null,
+      "method": "exact",
+      "confidence": 1
+    },
+    {
+      "position": 13,
+      "printed": "hyaluronic acid",
+      "canonical": "HYALURONIC ACID",
+      "functions": [
+        "ANTISTATIC",
+        "HUMECTANT",
+        "MOISTURISING",
+        "SKIN CONDITIONING"
+      ],
+      "annex": null,
+      "declared_pct": null,
+      "method": "exact",
+      "confidence": 1
+    },
+    {
+      "position": 14,
+      "printed": "xanthan gum",
+      "canonical": "XANTHAN GUM",
+      "functions": [
+        "BINDING",
+        "EMULSION STABILISING",
+        "GEL FORMING",
+        "SKIN CONDITIONING",
+        "SURFACTANT - CLEANSING",
+        "SURFACTANT - EMULSIFYING",
+        "VISCOSITY CONTROLLING"
+      ],
+      "annex": null,
+      "declared_pct": null,
+      "method": "exact",
+      "confidence": 1
+    },
+    {
+      "position": 15,
+      "printed": "allantoin",
+      "canonical": "ALLANTOIN",
+      "functions": [
+        "SKIN CONDITIONING",
+        "SKIN PROTECTING",
+        "SOOTHING"
+      ],
+      "annex": null,
+      "declared_pct": null,
+      "method": "exact",
+      "confidence": 1
+    },
+    {
+      "position": 16,
+      "printed": "dipotassium glycyrrhizate",
+      "canonical": "DIPOTASSIUM GLYCYRRHIZATE",
+      "functions": [
+        "HUMECTANT",
+        "SKIN CONDITIONING"
+      ],
+      "annex": null,
+      "declared_pct": null,
+      "method": "exact",
+      "confidence": 1
+    },
+    {
+      "position": 17,
+      "printed": "melaleuca alternifolia (tea tree) leaf oil",
+      "canonical": "MELALEUCA ALTERNIFOLIA LEAF OIL",
+      "functions": [
+        "ANTIOXIDANT",
+        "PERFUMING"
+      ],
+      "annex": null,
+      "declared_pct": null,
+      "method": "paren_stripped",
+      "confidence": 0.85
+    },
+    {
+      "position": 18,
+      "printed": "hedera helix (ivy) leaf/stem extract",
+      "canonical": "HEDERA HELIX LEAF/STEM EXTRACT",
+      "functions": [
+        "ANTICAKING",
+        "ANTIMICROBIAL",
+        "ASTRINGENT",
+        "SKIN CONDITIONING",
+        "SOOTHING",
+        "TONIC"
+      ],
+      "annex": null,
+      "declared_pct": null,
+      "method": "paren_stripped",
+      "confidence": 0.85
+    },
+    {
+      "position": 19,
+      "printed": "helianthus annuus (sunflower) seed extract",
+      "canonical": "HELIANTHUS ANNUUS SEED EXTRACT",
+      "functions": [
+        "SKIN CONDITIONING"
+      ],
+      "annex": null,
+      "declared_pct": null,
+      "method": "paren_stripped",
+      "confidence": 0.85
+    },
+    {
+      "position": 20,
+      "printed": "camellia sinensis leaf extract",
+      "canonical": "CAMELLIA SINENSIS LEAF EXTRACT",
+      "functions": [
+        "ANTIMICROBIAL",
+        "ANTIOXIDANT",
+        "ASTRINGENT",
+        "FRAGRANCE",
+        "HUMECTANT",
+        "ORAL CARE",
+        "SKIN CONDITIONING",
+        "SKIN CONDITIONING - EMOLLIENT",
+        "SKIN PROTECTING",
+        "TONIC",
+        "UV ABSORBER"
+      ],
+      "annex": null,
+      "declared_pct": null,
+      "method": "exact",
+      "confidence": 1
+    },
+    {
+      "position": 21,
+      "printed": "simmondsia chinensis (jojoba) seed oil",
+      "canonical": "SIMMONDSIA CHINENSIS SEED OIL",
+      "functions": [
+        "HAIR CONDITIONING",
+        "SKIN CONDITIONING",
+        "SKIN CONDITIONING - EMOLLIENT"
+      ],
+      "annex": null,
+      "declared_pct": null,
+      "method": "paren_stripped",
+      "confidence": 0.85
+    },
+    {
+      "position": 22,
+      "printed": "charcoal powder",
+      "canonical": "CHARCOAL POWDER",
+      "functions": [
+        "ABRASIVE",
+        "ABSORBENT",
+        "OPACIFYING"
+      ],
+      "annex": null,
+      "declared_pct": null,
+      "method": "exact",
+      "confidence": 1
+    },
+    {
+      "position": 23,
+      "printed": "oxygen",
+      "canonical": "OXYGEN",
+      "functions": [
+        "SKIN CONDITIONING"
+      ],
+      "annex": null,
+      "declared_pct": null,
+      "method": "exact",
+      "confidence": 1
+    },
+    {
+      "position": 24,
+      "printed": "disodium edta",
+      "canonical": "DISODIUM EDTA",
+      "functions": [
+        "CHELATING",
+        "VISCOSITY CONTROLLING"
+      ],
+      "annex": null,
+      "declared_pct": null,
+      "method": "exact",
+      "confidence": 1
+    },
+    {
+      "position": 25,
+      "printed": "fragrance. benzyl",
+      "canonical": null,
+      "functions": [],
+      "annex": null,
+      "declared_pct": null,
+      "method": "unresolved",
+      "confidence": 0
+    },
+    {
+      "position": 26,
+      "printed": "benzoate",
+      "canonical": null,
+      "functions": [],
+      "annex": null,
+      "declared_pct": null,
+      "method": "unresolved",
+      "confidence": 0
+    },
+    {
+      "position": 27,
+      "printed": "benzyl",
+      "canonical": null,
+      "functions": [],
+      "annex": null,
+      "declared_pct": null,
+      "method": "unresolved",
+      "confidence": 0
+    },
+    {
+      "position": 28,
+      "printed": "salicylate",
+      "canonical": null,
+      "functions": [],
+      "annex": null,
+      "declared_pct": null,
+      "method": "unresolved",
+      "confidence": 0
+    },
+    {
+      "position": 29,
+      "printed": "hexyl",
+      "canonical": null,
+      "functions": [],
+      "annex": null,
+      "declared_pct": null,
+      "method": "unresolved",
+      "confidence": 0
+    },
+    {
+      "position": 30,
+      "printed": "cinnamal",
+      "canonical": "CINNAMAL",
+      "functions": [
+        "DENATURANT",
+        "FLAVOURING",
+        "PERFUMING"
+      ],
+      "annex": {
+        "matches": [
+          {
+            "annex": "III",
+            "reference": "76",
+            "chemical_name": "2-Propenal, 3-phenyl-",
+            "matched_name": "Cinnamal",
+            "name_source": "glossary"
+          }
+        ]
+      },
+      "declared_pct": null,
+      "method": "exact",
+      "confidence": 1
+    },
+    {
+      "position": 31,
+      "printed": "limonene",
+      "canonical": "LIMONENE",
+      "functions": [
+        "DEODORANT",
+        "PERFUMING",
+        "SOLVENT"
+      ],
+      "annex": {
+        "matches": [
+          {
+            "annex": "III",
+            "reference": "88",
+            "chemical_name": "1-methyl-4-prop- 1-en-2-yl- cyclohexene; dl-limonene (racemic); Dipentene\n(R)-p- mentha-1,8-diene; (d-limonene);\n(S)-p- mentha-1,8-diene; (l-limonene);",
+            "matched_name": "Limonene",
+            "name_source": "glossary"
+          }
+        ]
+      },
+      "declared_pct": null,
+      "method": "exact",
+      "confidence": 1
+    },
+    {
+      "position": 32,
+      "printed": "linalool",
+      "canonical": "LINALOOL",
+      "functions": [
+        "DEODORANT",
+        "PERFUMING"
+      ],
+      "annex": {
+        "matches": [
+          {
+            "annex": "III",
+            "reference": "84",
+            "chemical_name": "1,6-Octadien-3-ol, 3,7-dimethyl-",
+            "matched_name": "Linalool",
+            "name_source": "glossary"
+          }
+        ]
+      },
+      "declared_pct": null,
+      "method": "exact",
+      "confidence": 1
+    }
+  ],
+  "may_contain": [],
+  "unresolved": [
+    {
+      "printed": "fragrance. benzyl",
+      "position": 25,
+      "section": "declared",
+      "reason": "not in the CosIng glossary or annexes"
+    },
+    {
+      "printed": "benzoate",
+      "position": 26,
+      "section": "declared",
+      "reason": "not in the CosIng glossary or annexes"
+    },
+    {
+      "printed": "benzyl",
+      "position": 27,
+      "section": "declared",
+      "reason": "not in the CosIng glossary or annexes"
+    },
+    {
+      "printed": "salicylate",
+      "position": 28,
+      "section": "declared",
+      "reason": "not in the CosIng glossary or annexes"
+    },
+    {
+      "printed": "hexyl",
+      "position": 29,
+      "section": "declared",
+      "reason": "not in the CosIng glossary or annexes"
+    }
+  ],
+  "trust": "unverified",
+  "sources": [
+    "obf:1000034026006"
+  ],
+  "source": {
+    "source": "obf",
+    "url": "https://world.openbeautyfacts.org/product/1000034026006",
+    "fetched_at": "2026-10-26T16:48:27Z",
+    "method": "obf_api",
+    "confidence": 0.7
+  },
+  "generated": true,
+  "generator_version": "0.1.0"
+}

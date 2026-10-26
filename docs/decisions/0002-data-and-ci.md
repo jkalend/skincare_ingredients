@@ -39,9 +39,11 @@ That changes the licensing and privacy shape:
 - Every run writes `ci/last-run.json` to `main`: status, conclusion, commit,
   run URL, check outcomes and a short error tail. That file is the machine-
   readable result ChatGPT or an agent reads after the run.
-- The query path stays local: CLI plus stdio MCP. A read-only Pages/JSON view is
-  optional later; it is not required for v1.
-- No remote MCP write endpoint. ChatGPT gets a trigger tool only if the owner
+- The query path is CLI plus stdio MCP. A **read-only Streamable HTTP MCP**
+  endpoint exposes public data for ChatGPT; it omits shelf tools, does not load
+  `local/`, and can require a bearer token. A read-only Pages/JSON view is
+  optional later.
+- No remote MCP write endpoint. ChatGPT gets a CI trigger tool only if the owner
   adds a Custom GPT Action or MCP that holds a fine-grained GitHub token.
 
 ## Consequences

@@ -4,10 +4,11 @@ Repo purpose: a free, agent-driven skincare ingredient index. Read
 [`docs/research.md`](docs/research.md) before proposing anything; read
 [`docs/agent-interface.md`](docs/agent-interface.md) before designing a command.
 
-**Current phase: foundations.** The language (Go 1.26) and the public/on-demand
-CI design are recorded in `docs/decisions/`. There is no product code yet; start
-from the first slice in [`docs/review-2026-10-26.md`](docs/review-2026-10-26.md)
-§8.
+**Current phase: v1 implemented.** Go CLI + MCP server, registry snapshot,
+manual CI. Run `go test ./...` before changing code. The pre-build review and
+scope are in [`docs/review-2026-10-26.md`](docs/review-2026-10-26.md); the
+operational guides are [`docs/run-ci.md`](docs/run-ci.md) and
+[`docs/chatgpt-mcp.md`](docs/chatgpt-mcp.md).
 
 ## Must
 
@@ -27,6 +28,7 @@ from the first slice in [`docs/review-2026-10-26.md`](docs/review-2026-10-26.md)
   [`DATA-LICENSE.md`](DATA-LICENSE.md).
 - CI is invocation-only: `workflow_dispatch`. Do not add `schedule`, `push` or
   `pull_request` triggers without an explicit decision.
+- Run `go test ./...` and `go vet ./...` before declaring a code change done.
 
 ## Must not
 

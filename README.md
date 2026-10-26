@@ -1,18 +1,32 @@
 # skincare_ingredients
 
-Personal, fully-free skincare ingredient index. Takes a barcode, a label photo,
-a pasted INCI list, or a URL; returns the ingredient list, its canonical INCI
-names, what the EU regulatory annexes say about each, and where the data came
-from. Built to be driven by an agent, not by a human at a terminal.
+Personal, fully-free skincare ingredient index. v1 takes a barcode or a pasted
+INCI list; OCR and URL scraping are the next fallback. It returns the ingredient
+list, canonical INCI names, what the EU regulatory annexes say about each, and
+where the data came from. Built to be driven by an agent, not by a human at a
+terminal.
 
-**Status: research complete, decisions recorded, no code.** Started 2026-10-26.
-Language: Go 1.26 (ADR 0001). The claim-by-claim review and the cut v1 scope are
-in [`docs/review-2026-10-26.md`](docs/review-2026-10-26.md). Next slice: port
-the validated parser, then ship `lookup` / `parse` / `analyze` / `shelf`.
+**Status: v1 code shipped (2026-10-26).** Go 1.26 CLI + MCP server, a live
+CosIng snapshot (33,114 names, 2,385 annex entries), and a seed OBF product.
+The pre-build review is in [`docs/review-2026-10-26.md`](docs/review-2026-10-26.md).
 
 **Repo:** <https://github.com/jkalend/skincare_ingredients> (public). **CI:**
 `workflow_dispatch` only — see [`docs/run-ci.md`](docs/run-ci.md) for running it
 and having ChatGPT read the result.
+
+## Quick start
+
+```bash
+go build -o skincare ./cmd/skincare
+./skincare doctor
+./skincare analyze --text "Aqua, Glycerin, Niacinamide"
+./skincare lookup 1000034026006
+./skincare shelf add --shelf default 1000034026006
+./skincare mcp --transport http --addr 127.0.0.1:8080 --read-only
+```
+
+ChatGPT connection: [`docs/chatgpt-mcp.md`](docs/chatgpt-mcp.md). Local agent:
+`./skincare mcp --transport stdio`.
 
 ## Hard constraints
 
@@ -35,7 +49,9 @@ and having ChatGPT read the result.
 | [`docs/decisions/0001-language.md`](docs/decisions/0001-language.md) | Go 1.26 static binary; Python parser used only as an offline oracle. |
 | [`docs/decisions/0002-data-and-ci.md`](docs/decisions/0002-data-and-ci.md) | Public repo, `data/` open data, `local/` private overlay, `workflow_dispatch`-only CI. |
 | [`docs/run-ci.md`](docs/run-ci.md) | Plain-language ways to run CI and have ChatGPT read the result. |
+| [`docs/chatgpt-mcp.md`](docs/chatgpt-mcp.md) | Read-only MCP endpoint: local run, free tunnel, ChatGPT connector, safety limits. |
 | [`DATA-LICENSE.md`](DATA-LICENSE.md) | ODbL for OBF-derived data, CC BY 4.0 for CosIng-derived data, scraped data excluded. |
+| [`THIRD_PARTY_NOTICES.md`](THIRD_PARTY_NOTICES.md) | MIT notice for the ported `on-the-list` parser; dependency licences. |
 | [`AGENTS.md`](AGENTS.md) | Repo rules for any agent working in here. |
 
 ## Scope and decisions
@@ -43,8 +59,8 @@ and having ChatGPT read the result.
 - **v1, local and public-data:** `lookup`, `parse` (text/file/stdin), `analyze`,
   `resolve`, `shelf`, `export json|csv`, `doctor`. Deterministic resolver only;
   no model in the loop.
-- **Deferred:** job files/locks/queue, OCR, local LLM, remote MCP, SQLite
-  export, batch scraping, multi-agent coordination.
+- **Deferred:** job files/locks/queue, OCR, local LLM, remote MCP writes,
+  SQLite export, batch scraping, multi-agent coordination.
 - **Language:** Go 1.26, one static binary. The MIT `on-the-list` parser is an
   offline porting oracle, not a runtime dependency.
 - **Storage:** the repo is public. `data/` holds open, OBF/CosIng-derived data
@@ -53,7 +69,9 @@ and having ChatGPT read the result.
   committed.
 - **CI:** public GitHub repo, **`workflow_dispatch` only** — no schedule, no
   push/PR trigger. Standard public-repo Actions minutes are free. Each run
-  writes `ci/last-run.json` for ChatGPT and agents to read.
+  tests, builds, writes `ci/last-run.json`, and commits that file.
+- **MCP:** local stdio for agents; read-only Streamable HTTP for ChatGPT over a
+  free HTTPS tunnel. The HTTP mode loads public data only and omits the shelf.
 
 ## What it will be able to do
 

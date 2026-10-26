@@ -9,10 +9,10 @@ assumptions.**
 > **v1 scope (2026-10-26).** The full contract below is the target, not the
 > first release. v1 implements `lookup`, `search`, `parse`, `analyze`,
 > `resolve`, `shelf`, `export json|csv`, `doctor` over a local `data/`
-> directory, plus stdio MCP. Deferred: `ocr`, `ingest` and batch jobs,
-> `job get/ls`, `export sqlite`, job files/locks/queue, multi-agent claims and
-> the remote/public MCP endpoint. Exit codes, the envelope, work orders and
-> provenance stay as written.
+> directory, plus stdio MCP and a read-only Streamable HTTP MCP endpoint for
+> ChatGPT. Deferred: `ocr`, `ingest` and batch jobs, `job get/ls`,
+> `export sqlite`, job files/locks/queue, multi-agent claims and remote MCP
+> writes. Exit codes, the envelope, work orders and provenance stay as written.
 
 ## 1. Principles
 
@@ -144,10 +144,10 @@ Wrap the commands; do not grow a second API.
 | `ingest_url` | `ingest` | **write** |
 | `shelf_add` / `shelf_rm` | `shelf` | **write** |
 
-Transports: **v1 ships stdio only.** Streamable HTTP and the public endpoint are
-deferred: ChatGPT needs a public host and a Business/Enterprise plan for full
-MCP, and publishing the shelf would leak personal data. The read/write split
-below is the target when that changes.
+Transports: **stdio and read-only Streamable HTTP.** HTTP exposes public data
+only: it omits shelf tools, does not load `local/`, and can require a bearer
+token. Remote MCP writes are deferred; the read/write split below is the target
+when they are added.
 
 Publish **read tools only** on the public endpoint: ChatGPT Pro can connect
 custom MCP servers with read/fetch permissions, and nobody else's ChatGPT should

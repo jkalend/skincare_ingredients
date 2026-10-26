@@ -24,19 +24,19 @@ not a log hunt.
   "commit": "abc123…",
   "ref": "main",
   "reason": "manual",
-  "checks": { "docs_links": "success" },
+  "checks": { "docs_links": "success", "go_test": "success", "go_build": "success" },
+  "binary_bytes": 12345678,
   "details": ["OK: 12 Markdown files; required files present; links resolve"],
   "generated_at": "2026-10-26T15:00:00Z"
 }
 ```
 
-The workflow currently checks docs links. When the Go code lands, the same job
-gets `go test ./...` and the parser corpus gate; the result shape stays.
+The workflow checks docs links, runs `go test ./...`, and builds the static
+binary. The result shape is stable. `ci/last-run.json` is the authoritative
+last run; open it for the current run URL and check outcomes.
 
-Verified 2026-10-26: run
-[40348273040](https://github.com/jkalend/skincare_ingredients/actions/runs/40348273040)
-succeeded with `docs_links: success`; its result is committed as
-[`ci/last-run.json`](https://github.com/jkalend/skincare_ingredients/blob/main/ci/last-run.json).
+For the ChatGPT MCP connection itself, see
+[`chatgpt-mcp.md`](chatgpt-mcp.md).
 
 ## Option A — you start it, ChatGPT reads it (simplest, no token in ChatGPT)
 

@@ -3,7 +3,7 @@
 cache/
 state/
 local/
-ci/docs-check.log
+ci/*.log
 
 # Build output
 dist/

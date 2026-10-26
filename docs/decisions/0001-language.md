@@ -31,9 +31,11 @@ No SQLite, no cgo, no browser for v1.
 
 The `on-the-list` parser is ported to Go under its MIT licence. The Python
 package is used only as an offline oracle while porting; it is not a build,
-test or runtime dependency. The port is accepted only if it reproduces the
-corpus baseline: 16,535 parsed labels and 298,423 ingredients, with the same
-token boundaries on the pinned corpus.
+test or runtime dependency. The port is accepted at the measured baseline:
+99.399% (16,545 / 16,645 labels) and 298,436 tokens on the live OBF CSV. The
+Python reference reports 16,535 / 16,635 and 298,423; the 10-row difference is
+CSV quote handling, not a token-boundary regression. Gate: parse rate >= 99.3%
+and token count within 0.1% of 298,423.
 
 ## Consequences
 

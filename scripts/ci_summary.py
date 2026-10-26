@@ -13,7 +13,8 @@ import os
 from datetime import datetime, timezone
 from pathlib import Path
 
-MAX_DETAIL_LINES = 40
+MAX_DETAIL_LINES = 30
+MAX_TOTAL_DETAIL_LINES = 80
 
 
 def env(name: str, default: str = "") -> str:
@@ -33,8 +34,13 @@ def tail(path: str | None) -> list[str]:
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--docs-outcome", required=True)
+    parser.add_argument("--go-outcome", default="skipped")
+    parser.add_argument("--build-outcome", default="skipped")
     parser.add_argument("--reason", default="manual")
     parser.add_argument("--details-file")
+    parser.add_argument("--go-details-file")
+    parser.add_argument("--build-details-file")
+    parser.add_argument("--binary")
     parser.add_argument("--output", default="ci/last-run.json")
     args = parser.parse_args()
 
@@ -43,7 +49,25 @@ def main() -> int:
     repo = env("GITHUB_REPOSITORY")
     run_url = f"{server}/{repo}/actions/runs/{run_id}" if run_id and repo else ""
 
-    ok = args.docs_outcome == "success"
+    checks = {
+        "docs_links": args.docs_outcome,
+        "go_test": args.go_outcome,
+        "go_build": args.build_outcome,
+    }
+    ok = all(value in ("success", "skipped") for value in checks.values())
+
+    details: list[str] = []
+    for path in (args.go_details_file, args.build_details_file, args.details_file):
+        if path:
+            details.extend(tail(path))
+    details = details[-MAX_TOTAL_DETAIL_LINES:]
+
+    binary_bytes = None
+    if args.binary:
+        binary = Path(args.binary)
+        if binary.is_file():
+            binary_bytes = binary.stat().st_size
+
     summary = {
         "schema_version": 1,
         "status": "completed",
@@ -56,8 +80,9 @@ def main() -> int:
         "commit": env("GITHUB_SHA"),
         "ref": env("GITHUB_REF_NAME"),
         "reason": args.reason,
-        "checks": {"docs_links": args.docs_outcome},
-        "details": tail(args.details_file),
+        "checks": checks,
+        "binary_bytes": binary_bytes,
+        "details": details,
         "generated_at": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
     }
 

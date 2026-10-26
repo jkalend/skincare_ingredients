@@ -19,11 +19,13 @@ REQUIRED = [
     "README.md",
     "AGENTS.md",
     "DATA-LICENSE.md",
+    "THIRD_PARTY_NOTICES.md",
     "docs/research.md",
     "docs/review-2026-10-26.md",
     "docs/scraping.md",
     "docs/agent-interface.md",
     "docs/run-ci.md",
+    "docs/chatgpt-mcp.md",
     "docs/decisions/0001-language.md",
     "docs/decisions/0002-data-and-ci.md",
 ]
