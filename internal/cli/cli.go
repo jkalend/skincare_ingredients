@@ -42,6 +42,9 @@ Commands:
   corpus-check                  dev: parse the OBF CSV and report counts
   version                       version
 
+Global flags must come before the command. "parse --text" is the input text,
+not the human-output mode.
+
 Global flags (before the command):
   --data-dir DIR    data directory (default data)
   --local-dir DIR   private overlay (default local)
@@ -391,6 +394,9 @@ func runMCP(g globals, args []string, stderr io.Writer) int {
 		}
 		return 0
 	case "http":
+		if !*readOnly {
+			return usageError(stderr, "HTTP MCP is read-only in v1; pass --read-only (use stdio for shelf writes)")
+		}
 		fmt.Fprintf(stderr, "mcp: HTTP listening on %s/mcp (read_only=%v, public_only=%v, token=%v)\n", *addr, *readOnly, *readOnly, *token != "")
 		if err := mcpserver.RunHTTP(ctx, svc, *addr, *readOnly, *token); err != nil {
 			fmt.Fprintln(stderr, "mcp:", err)

@@ -56,3 +56,15 @@ func TestParseHumanMode(t *testing.T) {
 		t.Fatalf("human output = %s", stdout.String())
 	}
 }
+
+func TestHTTPMCPRequiresReadOnly(t *testing.T) {
+	_, dataDir, localDir := testutil.Setup(t)
+	var stdout, stderr bytes.Buffer
+	exit := Run([]string{"--data-dir", dataDir, "--local-dir", localDir, "mcp", "--transport", "http"}, nil, &stdout, &stderr)
+	if exit != 2 {
+		t.Fatalf("exit=%d stderr=%s", exit, stderr.String())
+	}
+	if !strings.Contains(stderr.String(), "read-only") {
+		t.Fatalf("stderr=%s", stderr.String())
+	}
+}

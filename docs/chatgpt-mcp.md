@@ -32,6 +32,9 @@ curl http://127.0.0.1:8080/healthz
 
 MCP endpoint: `http://127.0.0.1:8080/mcp`
 
+HTTP mode refuses to start without `--read-only` in v1; remote writes are
+deferred. Use stdio for `shelf_add` / `shelf_rm`.
+
 On Windows, if `skincare` is not on your PATH:
 
 ```powershell
