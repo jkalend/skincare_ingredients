@@ -19,8 +19,10 @@ ingredients on the OBF corpus. It is also the main porting risk.
 
 ## Decision
 
-Use **Go 1.26**, one static binary, `CGO_ENABLED=0`, no cgo, no Python at
-runtime and no Python in CI.
+Use **Go 1.26**, one static binary, `CGO_ENABLED=0`, no cgo, and no Python in
+the product runtime. Tiny repo-tooling scripts (the docs link check and the CI
+summary writer) may use the runner's Python; they do not ship, are not part of
+the product build, and do not affect the Go binary.
 
 Dependencies: standard library, `golang.org/x/text` (NFKC + case folding),
 `golang.org/x/net/html` (HTML extraction), `github.com/modelcontextprotocol/go-sdk`
@@ -39,8 +41,8 @@ token boundaries on the pinned corpus.
   cross, cold); the dependency set above produced an **8,085,666-byte** Linux
   binary in 39.9 s cold including toolchain and module download. Warm-cache
   builds are expected to be seconds `[INFERENCE]`.
-- One language for ETL, CLI and stdio MCP. Cross-compile Windows/Linux/macOS
-  from one runner.
+- One language for the product (ETL, CLI, stdio MCP); the Python scripts are
+  repo tooling only. Cross-compile Windows/Linux/macOS from one runner.
 - Port cost: ~550 lines of parser/normalizer core plus golden tests. This is
   the only place where the validated Python behaviour can be lost.
 - No PyInstaller/Nuitka, no venv, no runtime install; the binary is the
